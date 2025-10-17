@@ -14,3 +14,11 @@ def create_player():
 
 def get_player_data(id_):
     return snake.models.Player.objects.get(id = id_)
+
+
+def get_or_create_player_data(id_):
+    if id_ == 0 or not player_id_exists(id_):
+        player_data = create_player()
+    else:
+        player_data = snake.dbi.get_player_data(id_)
+    return player_data

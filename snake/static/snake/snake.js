@@ -1,3 +1,20 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const box = 20;  // размер одной клетки
@@ -61,12 +78,11 @@ function set_player_id(player_id) {
 	return true;
 }
 */
-
+/*
 function get_player_id() {
 	let cookie_string = document.cookie;
 	let start_i = cookie_string.indexOf('id=');
 	if (start_i == -1) {
-		console.log('"id" key not found');
 		return '0';
 	}
 	start_i += 3;
@@ -78,12 +94,16 @@ function get_player_id() {
 	else {
 		id_string = cookie_string.slice(start_i);
 	}
-	if (id_string.toLowerCase() === 'undefined'){
-		console.log('id=undefined');
-		console.log(document.cookie);
+	return id_string;
+}*/
+
+
+function get_player_id() {
+	const player_id = getCookie('id');
+	if (player_id === null){
 		return '0';
 	}
-	return id_string;
+	return player_id;
 }
 
 
@@ -96,12 +116,15 @@ function set_player_id(player_id) {
 
 
 function send_score_to_server(score) {
+	const csrftoken = getCookie('csrftoken');
+	console.log(csrftoken);
 	let player_id = get_player_id();
 	
 	fetch("/save_score/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+			"X-CSRFToken": csrftoken,
         },
         body: JSON.stringify({
 			id: player_id,
@@ -116,6 +139,27 @@ function send_score_to_server(score) {
 		}
 	})
 	.catch(error => console.error("Ошибка:", error));
+}
+
+
+function get_saved_score_from_server() {
+	let player_id = get_player_id();
+	
+	fetch("/json_request/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+			id: player_id,
+			command: 'get_score',
+		})
+    })
+	.then(response => response.json())
+    .then(data => {
+		document.getElementById("saved_score").innerText = "Сохранённые очки: " + data.score;
+	})
+	.catch(error => console.error(error));
 }
 
 
@@ -166,6 +210,9 @@ function draw() {
 
     snake.unshift(newHead);
 }
+
+
+get_saved_score_from_server();
 
 
 let game = setInterval(draw, 100);

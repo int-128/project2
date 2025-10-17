@@ -32,3 +32,17 @@ def save_score(request):
     print('Player_ID: {}, Total score: {}'.format(player_data.id, player_data.score))
     player_data.save()
     return django.http.JsonResponse({'ok': True, 'player_id': str(new_player_id)})
+
+
+@csrf_exempt
+def json_request(request):
+    data = json.loads(request.body)
+    response_dict = {'ok': False}
+    if 'command' in data:
+        command = data['command']
+        if command == 'get_score':
+            player_id = int(data['id'])
+            player_data = snake.dbi.get_or_create_player_data(player_id)
+            response_dict['ok'] = True
+            response_dict['score'] = player_data.score
+    return django.http.JsonResponse(response_dict)
