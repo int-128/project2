@@ -6,7 +6,7 @@ import snake.dbi
 
 
 def index(request):
-    return render(request, "snake/index.html")
+    return render(request, "snake/index_m.html")
 
 
 @csrf_exempt

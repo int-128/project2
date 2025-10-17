@@ -45,6 +45,15 @@ function direction(event) {
 }
 
 
+try {
+	document.getElementById("up_button").onclick = function () { if (dir !== "DOWN") dir = "UP"; };
+	document.getElementById("down_button").onclick = function () { if (dir !== "UP") dir = "DOWN"; };
+	document.getElementById("left_button").onclick = function () { if (dir !== "RIGHT") dir = "LEFT"; };
+	document.getElementById("right_button").onclick = function () { if (dir !== "LEFT") dir = "RIGHT"; };
+}
+catch (error) {}
+
+
 function collision(head, arr) {
     for (let i = 0; i < arr.length; i++) {
         if (head.x === arr[i].x && head.y === arr[i].y) return true;
