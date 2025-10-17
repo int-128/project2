@@ -117,7 +117,7 @@ function set_player_id(player_id) {
 
 function send_score_to_server(score) {
 	const csrftoken = getCookie('csrftoken');
-	console.log(csrftoken);
+	//console.log(csrftoken);
 	let player_id = get_player_id();
 	
 	fetch("/save_score/", {
@@ -210,6 +210,9 @@ function draw() {
 
     snake.unshift(newHead);
 }
+
+
+document.getElementById("user_id").innerText = "ID: " + get_player_id();
 
 
 get_saved_score_from_server();
