@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+class Player(models.Model):
+    score = models.IntegerField()
+    name = models.CharField(max_length = 50)
