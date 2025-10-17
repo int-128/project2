@@ -42,12 +42,12 @@ function get_player_id() {
 		player_id_ls_value = localStorage.getItem('player_id');
 	}
 	catch (e) {
-		return 0;
+		return '0';
 	}
-	if ((player_id_ls_value === null) || (player_id_ls_value === "undefined")) {
-		return 0;
+	if (player_id_ls_value === null) {
+		return '0';
 	}
-	return Number(player_id_ls_value);
+	return player_id_ls_value;
 }
 
 
