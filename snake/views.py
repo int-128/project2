@@ -42,7 +42,11 @@ def json_request(request):
         command = data['command']
         if command == 'get_score':
             player_id = int(data['id'])
-            player_data = snake.dbi.get_or_create_player_data(player_id)
+            if player_id == 0 or not snake.dbi.player_id_exists(player_id):
+                player_data_score = 0
+            else:
+                player_data = snake.dbi.get_player_data(player_id)
+                player_data_score = player_data.score
             response_dict['ok'] = True
-            response_dict['score'] = player_data.score
+            response_dict['score'] = player_data_score
     return django.http.JsonResponse(response_dict)
