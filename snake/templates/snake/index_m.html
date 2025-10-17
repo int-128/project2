@@ -70,16 +70,11 @@
         #right_button { grid-column: 3; grid-row: 2; }
 
         @media (max-width: 800px) {
-            .container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto auto auto;
-                width: 90%;
-            }
-            #up_button, #down_button, #left_button, #right_button, #game {
-                grid-column: 1;
-                width: 100%;
-            }
-        }
+			.container {
+				transform: scale(0.7);
+				transform-origin: top center;
+			}
+		}
     </style>
 </head>
 <body>
