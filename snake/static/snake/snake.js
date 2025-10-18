@@ -221,7 +221,10 @@ function draw() {
 
     ctx.fillStyle = "red";
     ctx.fillRect(food.x, food.y, box, box);
+}
 
+
+function mainloop_itaration() {
     let headX = snake[0].x;
     let headY = snake[0].y;
 
@@ -259,6 +262,8 @@ function draw() {
     }
 
     snake.unshift(newHead);
+	
+	draw();
 }
 
 
@@ -275,7 +280,7 @@ function start_game() {
 	init_game();
 	document.getElementById("score").innerText = "Очки: 0";
 	get_saved_score_from_server();
-	game = setInterval(draw, 100);
+	game = setInterval(mainloop_itaration, 100);
 }
 
 
