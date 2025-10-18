@@ -64,15 +64,41 @@
         }
 
         /* Координаты (X,Y) */
-        #up_button    { grid-column: 1; grid-row: 1; }
-        #down_button  { grid-column: 1; grid-row: 2; }
-        #left_button  { grid-column: 3; grid-row: 1; }
-        #right_button { grid-column: 3; grid-row: 2; }
+        #up_button {
+			grid-column: 1;
+			grid-row: 1;
+		}
+		
+        #down_button {
+			grid-column: 1;
+			grid-row: 2;
+		}
+		
+        #left_button {
+			grid-column: 3;
+			grid-row: 1;
+		}
+		
+        #right_button {
+			grid-column: 3;
+			grid-row: 2;
+		}
+
+		@media (max-width: 1000px) {
+			.container {
+				transform: scale(0.9);
+			}
+		}
 
         @media (max-width: 800px) {
 			.container {
 				transform: scale(0.7);
-				<!--transform-origin: top center;-->
+			}
+		}
+		
+		@media (max-width: 650px) {
+			.container {
+				transform: scale(0.55);
 			}
 		}
     </style>
