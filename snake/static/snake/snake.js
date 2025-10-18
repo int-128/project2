@@ -18,21 +18,29 @@ function getCookie(name) {
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const box = 20;  // размер одной клетки
-let score = 0;
 
 
-let snake = [];
-snake[0] = { x: 9 * box, y: 10 * box };
-
-
-let food = {
-    x: Math.floor(Math.random() * 19 + 1) * box,
-    y: Math.floor(Math.random() * 19 + 1) * box
-};
-
-
+let score;
+let snake;
+let food;
 let dir;
-let last_move_direction = '';
+let last_move_direction;
+
+
+function init_game() {
+	score = 0;
+
+	snake = [];
+	snake[0] = { x: 9 * box, y: 10 * box };
+
+	food = {
+		x: Math.floor(Math.random() * 19 + 1) * box,
+		y: Math.floor(Math.random() * 19 + 1) * box
+	};
+
+	dir = '';
+	last_move_direction = '';
+}
 
 
 function set_direction(new_direction) {
@@ -74,6 +82,9 @@ try {
 	document.getElementById("right_button").onclick = function () { set_direction("RIGHT"); };
 }
 catch (error) {}
+
+
+document.getElementById("game").onclick = restart_game;
 
 
 function collision(head, arr) {
@@ -196,6 +207,9 @@ function get_saved_score_from_server() {
 }
 
 
+let game_is_running = false;
+
+
 function draw() {
     ctx.fillStyle = "#111";
     ctx.fillRect(0, 0, 400, 400);
@@ -238,8 +252,9 @@ function draw() {
         collision(newHead, snake)
     ) {
         clearInterval(game);
-        alert("Игра окончена! Ваш счёт: " + score);
-		send_score_to_server(score)
+        //alert("Игра окончена! Ваш счёт: " + score);
+		send_score_to_server(score);
+		game_is_running = false;
         return;
     }
 
@@ -249,8 +264,27 @@ function draw() {
 
 document.getElementById("user_id").innerText = "ID: " + get_player_id();
 
-
 get_saved_score_from_server();
 
 
-let game = setInterval(draw, 100);
+let game;
+
+
+function start_game() {
+	game_is_running = true;
+	init_game();
+	document.getElementById("score").innerText = "Очки: 0";
+	get_saved_score_from_server();
+	game = setInterval(draw, 100);
+}
+
+
+function restart_game() {
+	console.log(game_is_running);
+	if (!game_is_running) {
+		start_game();
+	}
+}
+
+
+start_game();
