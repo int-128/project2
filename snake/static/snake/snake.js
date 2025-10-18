@@ -138,8 +138,10 @@ function get_player_id() {
 }
 
 
+const COOKIE_EXPIRATION_DATE = "Thu, 1 Jan 2026 00:00:00 UTC";//Tue, 1 Jan 2030 00:00:00 UTC;";
+
 function set_player_id(player_id) {
-	cookie_string = "id=" + player_id + "; expires=Tue, 21 Oct 2025 00:00:00 UTC;";//Tue, 1 Jan 2030 00:00:00 UTC;";
+	cookie_string = "id=" + player_id + "; expires=" + COOKIE_EXPIRATION_DATE + ";";
 	console.log(cookie_string);
 	document.cookie = cookie_string;
 	console.log(document.cookie);
