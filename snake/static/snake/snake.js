@@ -32,24 +32,46 @@ let food = {
 
 
 let dir;
+let last_move_direction = '';
+
+
+function set_direction(new_direction) {
+	if (new_direction === "UP" && last_move_direction !== "DOWN"
+		|| new_direction === "DOWN" && last_move_direction !== "UP"
+		|| new_direction === "LEFT" && last_move_direction !== "RIGHT"
+		|| new_direction === "RIGHT" && last_move_direction !== "LEFT"
+		) dir = new_direction;
+}
 
 
 document.addEventListener("keydown", direction);
 
-
-function direction(event) {
+/*function direction(event) {
     if (event.key === "ArrowLeft" && dir !== "RIGHT") dir = "LEFT";
     else if (event.key === "ArrowUp" && dir !== "DOWN") dir = "UP";
     else if (event.key === "ArrowRight" && dir !== "LEFT") dir = "RIGHT";
     else if (event.key === "ArrowDown" && dir !== "UP") dir = "DOWN";
+}*/
+
+function direction(event) {
+    if (event.key === "ArrowLeft") set_direction("LEFT");
+    else if (event.key === "ArrowUp") set_direction("UP");
+    else if (event.key === "ArrowRight") set_direction("RIGHT");
+    else if (event.key === "ArrowDown") set_direction("DOWN");
 }
 
 
 try {
+	/*
 	document.getElementById("up_button").onclick = function () { if (dir !== "DOWN") dir = "UP"; };
 	document.getElementById("down_button").onclick = function () { if (dir !== "UP") dir = "DOWN"; };
 	document.getElementById("left_button").onclick = function () { if (dir !== "RIGHT") dir = "LEFT"; };
 	document.getElementById("right_button").onclick = function () { if (dir !== "LEFT") dir = "RIGHT"; };
+	*/
+	document.getElementById("up_button").onclick = function () { set_direction("UP"); };
+	document.getElementById("down_button").onclick = function () { set_direction("DOWN"); };
+	document.getElementById("left_button").onclick = function () { set_direction("LEFT"); };
+	document.getElementById("right_button").onclick = function () { set_direction("RIGHT"); };
 }
 catch (error) {}
 
@@ -191,6 +213,8 @@ function draw() {
     if (dir === "UP") headY -= box;
     if (dir === "RIGHT") headX += box;
     if (dir === "DOWN") headY += box;
+	
+	last_move_direction = dir
 
     if (headX === food.x && headY === food.y) {
         score++;
