@@ -142,9 +142,9 @@ const COOKIE_EXPIRATION_DATE = "Thu, 1 Jan 2026 00:00:00 UTC";//Tue, 1 Jan 2030 
 
 function set_player_id(player_id) {
 	cookie_string = "id=" + player_id + "; expires=" + COOKIE_EXPIRATION_DATE + ";";
-	console.log(cookie_string);
+	//console.log(cookie_string);
 	document.cookie = cookie_string;
-	console.log(document.cookie);
+	//console.log(document.cookie);
 }
 
 
