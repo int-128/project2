@@ -1,3 +1,8 @@
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const box = 20;  // размер одной клетки
+
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -15,9 +20,7 @@ function getCookie(name) {
 }
 
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-const box = 20;  // размер одной клетки
+const CSRF_TOKEN = getCookie('csrftoken');
 
 
 let score;
@@ -153,22 +156,18 @@ const COOKIE_EXPIRATION_DATE = "Thu, 1 Jan 2026 00:00:00 UTC";//Tue, 1 Jan 2030 
 
 function set_player_id(player_id) {
 	cookie_string = "id=" + player_id + "; expires=" + COOKIE_EXPIRATION_DATE + ";";
-	//console.log(cookie_string);
 	document.cookie = cookie_string;
-	//console.log(document.cookie);
 }
 
 
 function send_score_to_server(score) {
-	const csrftoken = getCookie('csrftoken');
-	//console.log(csrftoken);
 	let player_id = get_player_id();
 	
 	fetch("/save_score/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-			"X-CSRFToken": csrftoken,
+			"X-CSRFToken": CSRF_TOKEN,
         },
         body: JSON.stringify({
 			id: player_id,

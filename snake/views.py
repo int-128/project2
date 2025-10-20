@@ -27,22 +27,20 @@ def index(request):
     player_id = get_player_id(request)
     if player_id == 0:                           # To be removed
         player_id = get_player_id(request, 'id') # To be removed
-    print('index: ID: {}'.format(player_id))
     if player_id == 0 or not snake.dbi.player_id_exists(player_id):
         player_data = snake.dbi.create_player_data()
         player_id = player_data.id
     response = render(request, "snake/index_m.html")
-    response.set_cookie(ID_COOKIE_KEY, str(player_id), expires = COOKIE_EXPIRATION_DATETIME, httponly = False)
+    response.set_cookie(ID_COOKIE_KEY, str(player_id), expires = COOKIE_EXPIRATION_DATETIME, httponly = True)
     response.set_cookie('id', str(player_id), expires = COOKIE_EXPIRATION_DATETIME)
     return response
 
 
-@csrf_exempt
+#@csrf_exempt
 def save_score(request):
     data = json.loads(request.body)
     score = data['score']
     player_id = get_player_id(request)
-    print('save_score: ID: {}'.format(player_id))
     player_data = snake.dbi.get_player_data(player_id)
     player_data.score = player_data.score + score
     player_data.save()
@@ -52,7 +50,6 @@ def save_score(request):
 @csrf_exempt
 def json_request(request):
     player_id = get_player_id(request)
-    print('json_request: ID: {}'.format(player_id))
     data = json.loads(request.body)
     response_dict = {'ok': False}
     if 'command' in data:
