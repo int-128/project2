@@ -192,6 +192,7 @@ function get_saved_score_from_server() {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+			"X-CSRFToken": CSRF_TOKEN,
         },
         body: JSON.stringify({
 			id: player_id,
