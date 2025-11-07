@@ -160,50 +160,51 @@ function set_player_id(player_id) {
 }
 
 
-function send_score_to_server(score) {
-	let player_id = get_player_id();
-	
-	fetch("/save_score/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-			"X-CSRFToken": CSRF_TOKEN,
-        },
-        body: JSON.stringify({
-			id: player_id,
-			score: score,
-		})
-    })
-	.then(response => response.json())
-    .then(data => {
-		let new_player_id = data.player_id;
-		if (new_player_id !== '0') {
-			set_player_id(new_player_id);
-		}
-	})
-	.catch(error => console.error("Ошибка:", error));
+async function send_message(path, data) {
+	try {
+		const response = await fetch(path, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': CSRF_TOKEN,
+			},
+			body: JSON.stringify(data),
+		});
+		const response_data = await response.json();
+		return response_data;
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 
-function get_saved_score_from_server() {
+async function send_score_to_server(score) {
 	let player_id = get_player_id();
 	
-	fetch("/json_request/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-			"X-CSRFToken": CSRF_TOKEN,
-        },
-        body: JSON.stringify({
-			id: player_id,
-			command: 'get_score',
-		})
-    })
-	.then(response => response.json())
-    .then(data => {
-		document.getElementById("saved_score").innerText = "Сохранённые очки: " + data.score;
-	})
-	.catch(error => console.error(error));
+	let data = await send_message('/save_score/', {
+		'id': player_id,
+		'score': score,
+	});
+	
+}
+
+
+async function get_saved_score_from_server() {
+	let player_id = get_player_id();
+	
+	let data = await send_message('/json_request/', {
+		'id': player_id,
+		'command': 'get_score',
+	});
+
+	document.getElementById("saved_score").innerText = "Сохранённые очки: " + data['score'];
+}
+
+
+function send_game_started() {
+	send_message('/json_request/', {
+		'command': 'game_started',
+	});
 }
 
 
@@ -281,6 +282,7 @@ function start_game() {
 	document.getElementById("score").innerText = "Очки: 0";
 	get_saved_score_from_server();
 	game = setInterval(mainloop_itaration, 100);
+	send_game_started();
 }
 
 

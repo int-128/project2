@@ -161,3 +161,6 @@ cython_debug/
 
 # DataBase
 db.sqlite3
+
+# Py Tanks application
+pytanks/

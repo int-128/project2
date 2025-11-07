@@ -4,6 +4,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 import snake.dbi
 import qrcode
+import datetime
 
 
 ID_COOKIE_KEY = 'id_httponly'
@@ -42,12 +43,19 @@ def save_score(request):
     score = data['score']
     player_id = get_player_id(request)
     player_data = snake.dbi.get_player_data(player_id)
-    player_data.score = player_data.score + score
+    now_datetime = datetime.datetime.now()
+    now_timestamp = round(now_datetime.timestamp())
+    game_started_datetime = player_data.game_started_datetime
+    if game_started_datetime <= now_timestamp:
+        game_duration = now_timestamp - game_started_datetime
+        if player_data.game_started and score < game_duration:
+            player_data.score = player_data.score + score
+    player_data.game_started = 0
     player_data.save()
     return django.http.JsonResponse({'ok': True, 'player_id': '0'})
 
 
-@csrf_exempt
+#@csrf_exempt
 def json_request(request):
     player_id = get_player_id(request)
     data = json.loads(request.body)
@@ -57,6 +65,14 @@ def json_request(request):
         if command == 'get_score':
             player_data = snake.dbi.get_player_data(player_id)
             response_dict['score'] = player_data.score
+            response_dict['ok'] = True
+        elif command == 'game_started':
+            player_data = snake.dbi.get_player_data(player_id)
+            now_datetime = datetime.datetime.now()
+            now_timestamp = round(now_datetime.timestamp())
+            player_data.game_started_datetime = now_timestamp
+            player_data.game_started = 1
+            player_data.save()
             response_dict['ok'] = True
     return django.http.JsonResponse(response_dict)
 
