@@ -287,7 +287,6 @@ function start_game() {
 
 
 function restart_game() {
-	console.log(game_is_running);
 	if (!game_is_running) {
 		start_game();
 	}
