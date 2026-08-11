@@ -17,10 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import snake
-import pytanks
 
 
 urlpatterns = [
     path('', include('snake.urls')),
-    path('py_tanks/', include('pytanks.urls')),
 ]

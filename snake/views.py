@@ -22,12 +22,10 @@ def get_player_id(request, key=ID_COOKIE_KEY):
     return id_
 
 
-COOKIE_EXPIRATION_DATETIME = 'Thu, 1 Jan 2026 00:00:00 UTC'
+COOKIE_EXPIRATION_DATETIME = 'Thu, 31 Dec 2026 23:59:59 UTC'
 
 def index(request):
     player_id = get_player_id(request)
-    if player_id == 0:                           # To be removed
-        player_id = get_player_id(request, 'id') # To be removed
     if player_id == 0 or not snake.dbi.player_id_exists(player_id):
         player_data = snake.dbi.create_player_data()
         player_id = player_data.id
